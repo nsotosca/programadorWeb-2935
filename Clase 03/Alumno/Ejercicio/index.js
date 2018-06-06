@@ -15,11 +15,13 @@ $(document).ready(function () {
       case 'Lunes':
       case 'Martes':
       case 'Miércoles':
+      case 'Miercoles':
       case 'Jueves':
       case 'Viernes':
         console.log(daysOfTheWeek[i] + ' es un dia habil')
         break
       case 'Sábado':
+      case 'Sabado':
       case 'Domingo':
         console.log(daysOfTheWeek[i] + ' es fin de semana')
         break
