@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  var examResults = [7, 5, 6, 7, 6, 5, 4]
+  var examResults = [7, 5, 6, 4, 3, 2, 8]
 
   function promedio(results) {
     var suma = 0
