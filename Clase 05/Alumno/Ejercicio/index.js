@@ -16,18 +16,18 @@ var cars = [
   }
 ]
 
-function Car(model, brand, year) {
-  this.model = model
-  this.brand = brand
-  this.year = year
-  var id = Math.random()
+function Car(_model, _brand, _year) {
+  this.model = _model
+  this.brand = _brand
+  this.year = _year
+  var _id = Math.random()
 
   this.getCarName = function () {
-    var carName = 'Modelo:' + model + ' | Marca:' + brand + ' | Año:' + year
-    return carName
+    var _carName = 'Modelo:' + this.model + ' | Marca:' + this.brand + ' | Año:' + this.year
+    return _carName
   }
   this.getId = function () {
-    return id
+    return _id
   }
 }
 

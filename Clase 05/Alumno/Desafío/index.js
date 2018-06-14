@@ -19,21 +19,21 @@ var students = [
   }
 ]
 
-function Student(firstName, lastName, dni, email) {
-  this.firstName = firstName
-  this.lastName = lastName
-  this.dni = dni
-  var id = dni
-  this.email = email
+function Student(_firstName, _lastName, _dni, _email) {
+  this.firstName = _firstName
+  this.lastName = _lastName
+  this.dni = _dni
+  var _id = _dni
+  this.email = _email
 
   this.getId = function () {
-    return id
+    return _id
   }
   this.getFullName = function () {
-    if (lastName) {
-      var fullName = firstName + ' ' + lastName
+    if (this.lastName) {
+      var fullName = this.firstName + ' ' + this.lastName
     } else {
-      var fullName = firstName
+      var fullName = this.firstName
     }
     return fullName
   }
