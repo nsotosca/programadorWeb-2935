@@ -1,12 +1,13 @@
 function deleteElement(index, numbers) {
   if (Array.isArray(numbers)) {
-    numbers.splice(index, 1)
     var numbersCopy = []
     numbersCopy = numbers.slice()
+    numbersCopy.splice(index, 1)
   } else {
     return 'No es array'
   }
   return numbersCopy.join('-')
 }
 var numbers = [1, 2, 3, 4, 5]
-console.log(deleteElement(3, numbers))
+console.log(numbers.join('-'))
+console.log(deleteElement(0, numbers))
