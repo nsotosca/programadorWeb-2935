@@ -3,10 +3,10 @@ function deleteElement(index, numbers) {
     var numbersCopy = []
     numbersCopy = numbers.slice()
     numbersCopy.splice(index, 1)
+    return numbersCopy.join('-')
   } else {
     return 'No es array'
   }
-  return numbersCopy.join('-')
 }
 var numbers = [1, 2, 3, 4, 5]
 console.log(numbers.join('-'))
