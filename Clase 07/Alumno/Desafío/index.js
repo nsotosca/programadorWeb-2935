@@ -20,13 +20,14 @@ var studentsList = [
   'FLORENCIA'
 ]
 
-function saveLocalList (array) {
-  if (Array.isArray(array)) {
+function saveLocalList (key, array) {
+  if (Array.isArray(array) && typeof key === 'string') {
     array = JSON.stringify(array)
-    localStorage.setItem('list', array)
+    localStorage.setItem(key, array)
   }
 }
-saveLocalList(studentsList)
+
+saveLocalList('list', studentsList)
 
 function getLocalList (key) {
   if (key) {
