@@ -36,7 +36,7 @@ function getLocalList (key) {
     if (Array.isArray(array)) {
       return array
     } else {
-      var array = []
+      array = []
       return array
     }
   } else return (array = [])
