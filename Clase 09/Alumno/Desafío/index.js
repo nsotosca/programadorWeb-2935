@@ -10,11 +10,11 @@ function replaceClass (classAdd, classRemove, node) {
 function validar (event) {
   var node = event.target
   var messageNode
-  if (!node.value) {
-    replaceClass('is-invalid', 'is-valid', node)
-  } else if (node.value.indexOf('@', 1) === -1) {
-    replaceClass('is-invalid', 'is-valid', node)
-  } else if (node.value.indexOf('.', 1) === -1) {
+  if (
+    !node.value ||
+    node.value.indexOf('@', 1) === -1 ||
+    node.value.indexOf('.', 1) === -1
+  ) {
     replaceClass('is-invalid', 'is-valid', node)
   } else {
     replaceClass('is-valid', 'is-invalid', node)
