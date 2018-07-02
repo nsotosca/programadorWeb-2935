@@ -91,7 +91,6 @@ var inputDni = document.getElementById('dni')
 inputDni.onblur = validateDni
 function validateDni (event) {
   var inputNodeDni = event.target
-  console.log(inputNodeDni)
   var inputNodeParse = parseInt(inputNodeDni.value, 10)
   if (
     !inputNodeParse ||
@@ -111,7 +110,6 @@ var inputEmail = document.getElementById('email')
 inputEmail.onblur = validateEmail
 function validateEmail (event) {
   var inputNodeEmail = event.target
-  console.log(inputNodeEmail)
   if (
     !inputNodeEmail.value ||
     inputNodeEmail.value.indexOf('@', 1) === -1 ||
@@ -242,7 +240,6 @@ function searchStudentByText (event) {
     for (i = 0; i < studentsNewArray.length; i++) {
       firstName = studentsNewArray[i].firstName
       lastName = studentsNewArray[i].lastName
-      console.log(inputNode.value, lastName, firstName, studentsNewArray.length)
       if (
         includesText(inputNode.value, firstName) ||
         includesText(inputNode.value, lastName)
