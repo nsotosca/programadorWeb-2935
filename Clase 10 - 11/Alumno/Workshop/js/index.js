@@ -207,3 +207,58 @@ function addStudent (event) {
 }
 
 //ELIMINAR ALUMNO POR DNI
+
+var delButton = document.getElementById('deleteStudentButton')
+delButton.onclick = deleteStudent
+
+function deleteStudent (event) {
+  var inputNode = document.getElementById('deleteDni')
+  var id = searchStudentByDni(inputNode.value, studentsNewArray)
+  if (id !== -1) {
+    var node = document.getElementById(inputNode.value)
+    mainListNode.removeChild(node)
+    studentsNewArray.splice(id, 1)
+    saveLocalList(LS_KEY, studentsNewArray)
+  }
+}
+
+//BUSCAR UN ALUMNO Y MOSTRAR EN MAINLIST
+
+var searchButton = document.getElementById('searchStudentButton')
+searchButton.onclick = searchStudentByText
+
+function searchStudentByText (event) {
+  var inputNode = document.getElementById('searchText')
+  var firstName
+  var lastName
+  mainListNode.innerHTML = ' '
+  if (!inputNode.value) {
+    for (var i = 0; i < studentsNewArray.length; i++) {
+      student = studentsNewArray[i]
+      var liNode = createStudentNode(student)
+      mainListNode.appendChild(liNode)
+    }
+  } else {
+    for (i = 0; i < studentsNewArray.length; i++) {
+      firstName = studentsNewArray[i].firstName
+      lastName = studentsNewArray[i].lastName
+      console.log(inputNode.value, lastName, firstName, studentsNewArray.length)
+      if (
+        includesText(inputNode.value, firstName) ||
+        includesText(inputNode.value, lastName)
+      ) {
+        liNode = createStudentNode(studentsNewArray[i])
+        mainListNode.appendChild(liNode)
+      }
+    }
+  }
+}
+
+function includesText (text1, text2) {
+  if (typeof text1 === 'string' && typeof text2 === 'string') {
+    text1 = text1.toUpperCase()
+    text2 = text2.toUpperCase()
+    if (text2.indexOf(text1, 0) !== -1) return true
+    else return false
+  }
+}
