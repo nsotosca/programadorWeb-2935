@@ -2,21 +2,26 @@ console.log('Init app')
 
 var LS_KEY = 'studentList'
 
-var maintListNode = document.getElementById('mainList')
+var mainListNode = document.getElementById('mainList')
 
 var localList = getLocalList(LS_KEY)
 
 var studentsNewArray = []
 
+//SE RECORRE EL LOCALSTORAGE
+//SI HAY DATOS, SE CREA EL OBJ STUDENT
+//GUARDA EN EL ARRAY EN LA ULTIMA POSICION
+//CREA UN NODO LI CON LOS DATOS Y LOS COLOCA EN LA MAINLIST
 for (var i = 0; i < localList.length; i++) {
-  studentsNewArray.push(
-    new Student(
-      localList[i].firstName,
-      localList[i].lastName,
-      localList[i].dni,
-      localList[i].email
-    )
+  newStudent = new Student(
+    localList[i].firstName,
+    localList[i].lastName,
+    localList[i].dni,
+    localList[i].email
   )
+  studentsNewArray.push(newStudent)
+  var liNode = createStudentNode(newStudent)
+  mainListNode.appendChild(liNode)
 }
 
 //SALVAR EN LOCAL STORAGE
@@ -42,27 +47,20 @@ function getLocalList (key) {
 }
 
 //FUNCION CONSTRUCTORA OBJ ESTUDIANTE
-function Student (_firstName, _lastName, _dni, email) {
-  this.firstName = _firstName
-  if (_lastName) {
-    this.lastName = _lastName
+function Student (firstName, lastName, dni, email) {
+  this.firstName = firstName
+  if (lastName) {
+    this.lastName = lastName
   }
-  if (_email) {
-    this.email = _email
-  }
-  this.dni = _dni
-  var _id = _dni
+  this.dni = dni
+  var id = dni
+  this.email = email
 
   this.getId = function () {
-    return _id
+    return id
   }
   this.getFullName = function () {
-    if (this.lastName) {
-      var fullName = this.firstName + ' ' + this.lastName
-    } else {
-      var fullName = this.firstName
-    }
-    return fullName
+    return (this.firstName || '') + ' ' + (this.lastName || '')
   }
 }
 
@@ -77,7 +75,6 @@ var inputFirstName = document.getElementById('firstName')
 var inputLastName = document.getElementById('lastName')
 
 inputFirstName.onblur = validateInput
-inputLastName.onblur = validateInput
 
 function validateInput (event) {
   var inputNode = event.target
@@ -100,7 +97,7 @@ function validateDni (event) {
     !inputNodeParse ||
     isNaN(inputNodeParse) ||
     inputNodeParse <= 0 ||
-    searchStudentByDni(inputNodeParse, studentsNewArray) !== -1
+    searchStudentByDni(inputNodeDni.value, studentsNewArray) !== -1
   ) {
     replaceClass('is-invalid', 'is-valid', inputNodeDni)
   } else {
@@ -124,13 +121,14 @@ function validateEmail (event) {
   } else {
     replaceClass('is-valid', 'is-invalid', inputNodeEmail)
   }
+  validateButtonSend()
 }
 
 //BUSCAR ESTUDIANTE POR DNI
-function searchStudentByDni (value, studentsList) {
+function searchStudentByDni (value, array) {
   var index = -1
-  for (var i = 0; i < studentsList.length; i++) {
-    if (value === studentsList[i].getId()) {
+  for (var i = 0; i < array.length; i++) {
+    if (value === array[i].getId()) {
       index = i
       break
     }
@@ -138,12 +136,38 @@ function searchStudentByDni (value, studentsList) {
   return index
 }
 
+//FUNCION CREAR NODO CON DATOS DEL ESTUDIANTE
+
+function createStudentNode (newStudent) {
+  // Creo el nodo li
+  var liNode = document.createElement('li')
+
+  // Le setteo el id al nodo
+  liNode.id = newStudent.getId()
+
+  // Le setteo la clase al nodo
+  liNode.className = 'list-group-item'
+
+  // Le agrego el contenido al nodo
+  liNode.innerHTML =
+    '<h1>' +
+    newStudent.getFullName() +
+    '</h1><h3>DNI:' +
+    newStudent.dni +
+    '</h3><p>E-mail:' +
+    newStudent.email +
+    '</p>'
+
+  // Devuelvo solo el nodo con todos sus datos
+  return liNode
+}
+
 //ACTIVAR O DESACTIVAR BOTON DE ENVIAR
 
 function validateButtonSend (value) {
   var inputValid = document.getElementsByClassName('is-valid')
   var button = document.getElementById('addStudentButton')
-  if (inputValid.length === 2) {
+  if (inputValid.length === 3) {
     button.disabled = false
   } else {
     button.disabled = true
@@ -151,3 +175,35 @@ function validateButtonSend (value) {
 }
 
 //FUNCION AGREGAR ESTUDIANTE
+
+var saveButton = document.getElementById('addStudentButton')
+saveButton.onclick = addStudent
+
+function addStudent (event) {
+  var firstName = inputFirstName.value
+  var lastName = inputLastName.value || null
+  var dni = inputDni.value
+  var email = inputEmail.value
+
+  var newStudent = new Student(firstName, lastName, dni, email)
+  studentsNewArray.push(newStudent)
+
+  //SE COLOCA EN EL HTML
+  var liNode = createStudentNode(newStudent)
+  mainListNode.appendChild(liNode)
+  //SE GUARDA EN EL LOCALSTORAGE
+  saveLocalList(LS_KEY, studentsNewArray)
+  //LIMPIA VALOR Y CLASES DE INPUTS, SE DESHABILITA BOTON ENVIAR
+  inputFirstName.value = ' '
+  inputLastName.value = ' '
+  inputDni.value = ' '
+  inputEmail.value = ' '
+
+  saveButton.disabled = true
+
+  inputFirstName.classList.remove('is-valid')
+  inputDni.classList.remove('is-valid')
+  inputEmail.classList.remove('is-valid')
+}
+
+//ELIMINAR ALUMNO POR DNI
