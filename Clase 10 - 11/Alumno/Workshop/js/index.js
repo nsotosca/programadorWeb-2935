@@ -211,7 +211,7 @@ delButton.onclick = deleteStudent
 //ACTIVAR O DESACTIVAR DELETE
 function validateButtonDelete (event) {
   var inputNode = event.target
-  if (!inputNode.value) {
+  if (!inputNode.value.trim()) {
     delButton.disabled = true
   } else {
     delButton.disabled = false
@@ -235,15 +235,34 @@ function deleteStudent (event) {
 //BUSCAR UN ALUMNO Y MOSTRAR EN MAINLIST
 
 var searchButton = document.getElementById('searchStudentButton')
+searchButton.disabled = true
 searchButton.onclick = searchStudentByText
 
+var inputNodeSearch = document.getElementById('searchText')
+inputNodeSearch.onblur = validateButtonSeach
+
+//ACTIVAR O DESACTIVAR DELETE
+function validateButtonSeach (event) {
+  var inputNode = event.target
+  if (!inputNode.value.trim()) {
+    mainListNode.innerHTML = ''
+    for (var i = 0; i < studentsNewArray.length; i++) {
+      student = studentsNewArray[i]
+      liNode = createStudentNode(student)
+      mainListNode.appendChild(liNode)
+    }
+    searchButton.disabled = true
+  } else {
+    searchButton.disabled = false
+  }
+}
+
 function searchStudentByText (event) {
-  var inputNode = document.getElementById('searchText')
   var fullname
   var liNode
   var student
   mainListNode.innerHTML = ''
-  if (!inputNode.value) {
+  if (!inputNodeSearch.value.trim()) {
     for (var i = 0; i < studentsNewArray.length; i++) {
       student = studentsNewArray[i]
       liNode = createStudentNode(student)
@@ -252,7 +271,7 @@ function searchStudentByText (event) {
   } else {
     for (i = 0; i < studentsNewArray.length; i++) {
       fullname = studentsNewArray[i].getFullName()
-      if (includesText(inputNode.value, fullname)) {
+      if (includesText(inputNodeSearch.value, fullname)) {
         liNode = createStudentNode(studentsNewArray[i])
         mainListNode.appendChild(liNode)
       }
