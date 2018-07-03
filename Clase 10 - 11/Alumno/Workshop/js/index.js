@@ -48,13 +48,13 @@ function getLocalList (key) {
 
 //FUNCION CONSTRUCTORA OBJ ESTUDIANTE
 function Student (firstName, lastName, dni, email) {
-  this.firstName = firstName
+  this.firstName = firstName.trim()
   if (lastName) {
-    this.lastName = lastName
+    this.lastName = lastName.trim()
   }
-  this.dni = dni
+  this.dni = dni.trim()
   var id = dni
-  this.email = email
+  this.email = email.trim()
 
   this.getId = function () {
     return id
@@ -192,31 +192,43 @@ function addStudent (event) {
   //SE GUARDA EN EL LOCALSTORAGE
   saveLocalList(LS_KEY, studentsNewArray)
   //LIMPIA VALOR Y CLASES DE INPUTS, SE DESHABILITA BOTON ENVIAR
-  inputFirstName.value = ' '
-  inputLastName.value = ' '
-  inputDni.value = ' '
-  inputEmail.value = ' '
+  inputFirstName.value = ''
+  inputLastName.value = ''
+  inputDni.value = ''
+  inputEmail.value = ''
 
   saveButton.disabled = true
-
   inputFirstName.classList.remove('is-valid')
   inputDni.classList.remove('is-valid')
   inputEmail.classList.remove('is-valid')
 }
 
-//ELIMINAR ALUMNO POR DNI
-
+var inputNodeDel = document.getElementById('deleteDni')
+inputNodeDel.onblur = validateButtonDelete
 var delButton = document.getElementById('deleteStudentButton')
+delButton.disabled = true
 delButton.onclick = deleteStudent
+//ACTIVAR O DESACTIVAR DELETE
+function validateButtonDelete (event) {
+  var inputNode = event.target
+  if (!inputNode.value) {
+    delButton.disabled = true
+  } else {
+    delButton.disabled = false
+  }
+}
 
+//ELIMINAR ALUMNO POR DNI
 function deleteStudent (event) {
-  var inputNode = document.getElementById('deleteDni')
-  var id = searchStudentByDni(inputNode.value, studentsNewArray)
+  console.log(inputNodeDel.value)
+  var id = searchStudentByDni(inputNodeDel.value, studentsNewArray)
   if (id !== -1) {
-    var node = document.getElementById(inputNode.value)
+    var node = document.getElementById(inputNodeDel.value)
     mainListNode.removeChild(node)
     studentsNewArray.splice(id, 1)
     saveLocalList(LS_KEY, studentsNewArray)
+    delButton.disabled = true
+    inputNodeDel.value = ''
   }
 }
 
@@ -227,23 +239,20 @@ searchButton.onclick = searchStudentByText
 
 function searchStudentByText (event) {
   var inputNode = document.getElementById('searchText')
-  var firstName
-  var lastName
-  mainListNode.innerHTML = ' '
+  var fullname
+  var liNode
+  var student
+  mainListNode.innerHTML = ''
   if (!inputNode.value) {
     for (var i = 0; i < studentsNewArray.length; i++) {
       student = studentsNewArray[i]
-      var liNode = createStudentNode(student)
+      liNode = createStudentNode(student)
       mainListNode.appendChild(liNode)
     }
   } else {
     for (i = 0; i < studentsNewArray.length; i++) {
-      firstName = studentsNewArray[i].firstName
-      lastName = studentsNewArray[i].lastName
-      if (
-        includesText(inputNode.value, firstName) ||
-        includesText(inputNode.value, lastName)
-      ) {
+      fullname = studentsNewArray[i].getFullName()
+      if (includesText(inputNode.value, fullname)) {
         liNode = createStudentNode(studentsNewArray[i])
         mainListNode.appendChild(liNode)
       }
