@@ -203,11 +203,6 @@ function addStudent (event) {
   inputEmail.classList.remove('is-valid')
 }
 
-var inputNodeDel = document.getElementById('deleteDni')
-inputNodeDel.onblur = validateButtonDelete
-var delButton = document.getElementById('deleteStudentButton')
-delButton.disabled = true
-delButton.onclick = deleteStudent
 //ACTIVAR O DESACTIVAR DELETE
 function validateButtonDelete (event) {
   var inputNode = event.target
@@ -217,10 +212,14 @@ function validateButtonDelete (event) {
     delButton.disabled = false
   }
 }
+var inputNodeDel = document.getElementById('deleteDni')
+inputNodeDel.onblur = validateButtonDelete
+var delButton = document.getElementById('deleteStudentButton')
+delButton.disabled = true
+delButton.onclick = deleteStudent
 
 //ELIMINAR ALUMNO POR DNI
 function deleteStudent (event) {
-  console.log(inputNodeDel.value)
   var id = searchStudentByDni(inputNodeDel.value, studentsNewArray)
   if (id !== -1) {
     var node = document.getElementById(inputNodeDel.value)
@@ -232,24 +231,19 @@ function deleteStudent (event) {
   }
 }
 
-//BUSCAR UN ALUMNO Y MOSTRAR EN MAINLIST
-
-var searchButton = document.getElementById('searchStudentButton')
-searchButton.disabled = true
-searchButton.onclick = searchStudentByText
-
-var inputNodeSearch = document.getElementById('searchText')
-inputNodeSearch.onblur = validateButtonSeach
-
-//ACTIVAR O DESACTIVAR DELETE
+//ACTIVAR O DESACTIVAR SEARCH
 function validateButtonSeach (event) {
   var inputNode = event.target
   if (!inputNode.value.trim()) {
-    mainListNode.innerHTML = ''
-    for (var i = 0; i < studentsNewArray.length; i++) {
-      student = studentsNewArray[i]
-      liNode = createStudentNode(student)
-      mainListNode.appendChild(liNode)
+    var liNode
+    var student
+    if (mainListNode.childElementCount < studentsNewArray.length) {
+      mainListNode.innerHTML = ''
+      for (var i = 0; i < studentsNewArray.length; i++) {
+        student = studentsNewArray[i]
+        liNode = createStudentNode(student)
+        mainListNode.appendChild(liNode)
+      }
     }
     searchButton.disabled = true
   } else {
@@ -257,24 +251,24 @@ function validateButtonSeach (event) {
   }
 }
 
+//BUSCAR UN ALUMNO Y MOSTRAR EN MAINLIST
+var searchButton = document.getElementById('searchStudentButton')
+searchButton.disabled = true
+searchButton.onclick = searchStudentByText
+
+var inputNodeSearch = document.getElementById('searchText')
+inputNodeSearch.onblur = validateButtonSeach
+
 function searchStudentByText (event) {
   var fullname
   var liNode
   var student
   mainListNode.innerHTML = ''
-  if (!inputNodeSearch.value.trim()) {
-    for (var i = 0; i < studentsNewArray.length; i++) {
-      student = studentsNewArray[i]
-      liNode = createStudentNode(student)
+  for (i = 0; i < studentsNewArray.length; i++) {
+    fullname = studentsNewArray[i].getFullName()
+    if (includesText(inputNodeSearch.value, fullname)) {
+      liNode = createStudentNode(studentsNewArray[i])
       mainListNode.appendChild(liNode)
-    }
-  } else {
-    for (i = 0; i < studentsNewArray.length; i++) {
-      fullname = studentsNewArray[i].getFullName()
-      if (includesText(inputNodeSearch.value, fullname)) {
-        liNode = createStudentNode(studentsNewArray[i])
-        mainListNode.appendChild(liNode)
-      }
     }
   }
 }
