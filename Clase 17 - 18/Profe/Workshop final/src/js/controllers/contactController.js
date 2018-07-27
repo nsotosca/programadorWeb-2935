@@ -1,6 +1,7 @@
-function contactController () {
-  console.log('Soy el contact')
+import { postData } from '../utils/ajax'
 
+function contactController () {
+  console.log($(window).height())
   var firstNameInputNode = $('#firstName')
   var emailInputNode = $('#email')
   var commentsInputNode = $('#comments')
@@ -79,6 +80,24 @@ function contactController () {
 
     validateButton()
   }
+
+  submitButtonNode.click(function () {
+    var firstName = firstNameInputNode.val()
+    var email = emailInputNode.val()
+    var comments = commentsInputNode.val()
+
+    var data = {
+      firstName: firstName,
+      email: email,
+      comments: comments
+    }
+
+    postData('./simpleEmail.php', data, function (error, data) {
+      if (!error) {
+        window.location.hash = '#/contact/greetings'
+      }
+    })
+  })
 
   function validateButton () {
     var validInputNodes = $('.is-valid')
